@@ -1,0 +1,31 @@
+<div class="page-content d-flex justify-content-center align-items-center">
+  <div class="guest-table">
+    @for (savedInformation of savedInfrormations | keyvalue; track $index) {
+    <app-guest-information-survey
+      [guestInformationId]="+savedInformation.key"
+      [isDeletable]="isDeletable()"
+      [startExpanded]="isExtended(+savedInformation.key)"
+      (onInformationSaved)="onSavedGuestInformation($event)"
+      (onInformationDeleted)="onDeletedGuestInformation($event)"
+      (onSaveStatusChange)="onSaveStatusChange($event)">
+    </app-guest-information-survey>
+    <br>
+    }
+
+    @if (isErroState()) {
+      <div class="d-flex error-container">
+        <mat-error class="error">
+          Um ou mais dos convidados não estão guardados.
+        </mat-error>
+      </div>
+    }
+
+    <button mat-raised-button class="add-button" (click)="addGuest()">
+      <mat-icon>add</mat-icon>
+      Novo Convidado
+    </button>
+    <button mat-raised-button class="submit-button" (click)="submit()">
+      <mat-icon>send</mat-icon>
+      Submeter
+    </button>
+  </div>

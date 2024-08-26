@@ -1,0 +1,23 @@
+.guest-table {
+  width: min(100%, 800px);
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.error-container {
+  align-content: end;
+}
+
+.error {
+  padding-bottom: 2%;
+  float: right;
+}
+
+.add-button {
+  float: left;
+}
+
+.submit-button {
+  float: right;
+}

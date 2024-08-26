@@ -1,0 +1,73 @@
+<mat-expansion-panel [expanded]="startExpanded">
+  <mat-expansion-panel-header>
+    <mat-panel-title>{{savedGuestInformation?.name ?? defaultGuestName}}</mat-panel-title>
+    @if (!isInformationSaved()){
+      <mat-icon class="save-status" matTooltip="Informação não gravada">warning</mat-icon>
+    }
+  </mat-expansion-panel-header>
+
+  <form [formGroup]="guestInformationForm">
+    <mat-form-field class="field">
+      <mat-label>Nome e Apelido</mat-label>
+      <input matInput #input formControlName="name" />
+    </mat-form-field>
+    <br>
+    <mat-card appearance="outlined">
+      <mat-card-content>
+        <mat-grid-list cols="2" rowHeight="50px">
+          <mat-grid-tile>
+            <div class="child-toggle-container">
+                <mat-slide-toggle formControlName="child_toggle" labelPosition="before">Crianças 0-9</mat-slide-toggle>
+            </div>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <div class="child-age-container">
+              <mat-button-toggle-group formControlName="age">
+                @for (childAge of ages; track $index) {
+                  <mat-button-toggle [value]="childAge.value">{{childAge.text}}</mat-button-toggle>
+                }
+              </mat-button-toggle-group>
+            </div>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </mat-card-content>
+    </mat-card>
+    <br>
+    <mat-form-field class="field">
+      <mat-label>Restrições Alimentares</mat-label>
+      <mat-chip-grid #chipGrid formControlName="restrictions">
+        @for (restriction of restrictions; track $index) {
+          <mat-chip-row (removed)="remove(restriction)">
+            {{restriction}}
+            <button matChipRemove [attr.aria-label]="'remove ' + restriction">
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip-row>
+        }
+      </mat-chip-grid>
+      <input
+        name="currentRestriction"
+        placeholder="Nova Restriçães"
+        #fruitInput
+        [matChipInputFor]="chipGrid"
+        [matAutocomplete]="auto"
+      />
+      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+        @for (restriction of avilableRestrictions(); track restriction) {
+          <mat-option [value]="restriction">{{restriction}}</mat-option>
+        }
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-action-row>
+      <button mat-button [disabled]="isDeletable" disabled (click)="delete()">
+        <mat-icon>delete</mat-icon>
+        Apagar
+      </button>
+      <button mat-button (click)="save()">
+        <mat-icon>save</mat-icon>
+        Guardar
+      </button>
+    </mat-action-row>
+  </form>
+</mat-expansion-panel>
