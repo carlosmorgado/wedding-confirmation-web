@@ -16,6 +16,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatGridListModule } from '@angular/material/grid-list';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 
 @NgModule({
@@ -40,6 +41,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
     MatSlideToggleModule,
     MatButtonToggleModule,
     MatGridListModule,
+    MatCheckboxModule
   ]
 })
 export class SurveyModule { }

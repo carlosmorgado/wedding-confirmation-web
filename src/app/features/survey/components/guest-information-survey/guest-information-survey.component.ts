@@ -7,6 +7,7 @@ import { GuestInformationToSave } from '../../../../core/GuestInformationToSave'
 import { SaveStatus } from '../../../../core/FormValidation';
 import { ChildAge } from '../../../../core/ChildAge';
 import { distinctUntilChanged } from 'rxjs';
+import { DietRestrictionSelection } from '../../../../core/DietRestrictionSelection';
 
 @Component({
   selector: 'app-guest-information-survey',
@@ -43,8 +44,12 @@ export class GuestInformationSurveyComponent implements OnInit {
     this.ageFourToNine
   ];
 
-  allRestrictions: DietRestriction[] = Object.values<DietRestriction>(DietRestriction);
-  restrictions: DietRestriction[] = [];
+  restrictions: DietRestrictionSelection  [] = Object
+  .values<DietRestriction>(DietRestriction)
+  .map((r: DietRestriction) => ({
+    dietRestriction: r,
+    isSelected: false
+  }));
 
   isInitialized: boolean = false;
 
@@ -91,24 +96,14 @@ export class GuestInformationSurveyComponent implements OnInit {
     this.isInitialized = true;
   }
 
-  remove(restriction: DietRestriction): void {
-    this.restrictions = this.restrictions.filter((r, i) => r !== restriction);
-  }
+  update(dietRestriction: DietRestriction, isChecked: boolean): void {
+    const restriction = this
+      .restrictions
+      .find((selection: DietRestrictionSelection) => selection.dietRestriction === dietRestriction);
 
-  selected(event: MatAutocompleteSelectedEvent): void {
-    const restriction: DietRestriction = event.option.viewValue as DietRestriction;
-    if (this.restrictions.includes(restriction)) {
-      return;
+    if (restriction) {
+        restriction.isSelected = isChecked;
     }
-
-    this.restrictions.push(restriction);
-
-    event.option.deselect();
-  }
-
-  avilableRestrictions(): DietRestriction[] {
-    return this.allRestrictions
-      .filter(restriction => !this.restrictions.includes(restriction));
   }
 
   delete(): void {
@@ -152,6 +147,10 @@ export class GuestInformationSurveyComponent implements OnInit {
       isAgeZeroToThree: this.age === this.ageZeroToThree.value,
       isAgeFourToNine: this.age === this.ageFourToNine.value,
       isAdult: !this.isChild,
+      restrictions: this
+        .restrictions
+        .filter((selection: DietRestrictionSelection) => selection.isSelected)
+        .map((selection: DietRestrictionSelection) => selection.dietRestriction),
     }
   }
 }

@@ -33,31 +33,18 @@
       </mat-card-content>
     </mat-card>
     <br>
-    <mat-form-field class="field">
-      <mat-label>Restrições Alimentares</mat-label>
-      <mat-chip-grid #chipGrid formControlName="restrictions">
+    <mat-label>Restrições Alimentares</mat-label>
+      <ul>
         @for (restriction of restrictions; track $index) {
-          <mat-chip-row (removed)="remove(restriction)">
-            {{restriction}}
-            <button matChipRemove [attr.aria-label]="'remove ' + restriction">
-              <mat-icon>cancel</mat-icon>
-            </button>
-          </mat-chip-row>
+          <li>
+            <mat-checkbox
+              [checked]="restriction.isSelected"
+              (change)="update(restriction.dietRestriction, $event.checked)">
+              {{restriction.dietRestriction}}
+            </mat-checkbox>
+        </li>
         }
-      </mat-chip-grid>
-      <input
-        name="currentRestriction"
-        placeholder="Nova Restriçães"
-        #fruitInput
-        [matChipInputFor]="chipGrid"
-        [matAutocomplete]="auto"
-      />
-      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-        @for (restriction of avilableRestrictions(); track restriction) {
-          <mat-option [value]="restriction">{{restriction}}</mat-option>
-        }
-      </mat-autocomplete>
-    </mat-form-field>
+      </ul>
 
     <mat-action-row>
       <button mat-button [disabled]="isDeletable" disabled (click)="delete()">
