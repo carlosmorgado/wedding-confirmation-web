@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { SavedGuestInformation } from '../../../../core/SavedGuestInformation';
 import { GuestInformationToSave } from '../../../../core/GuestInformationToSave';
 import { SaveStatus } from '../../../../core/FormValidation';
 import { GuestInformationSaveStaus as GuestInformationSaveStatus } from '../../../../core/GuestInformationError';
+import { SurveysService } from '../../../../core/surveys.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-survey',
@@ -10,13 +12,15 @@ import { GuestInformationSaveStaus as GuestInformationSaveStatus } from '../../.
   styleUrl: './survey.component.scss'
 })
 export class SurveyComponent {
+  private _snackBar = inject(MatSnackBar);
+
   currentId: number = 0;
   savedInfrormations: SavedGuestInformation = {};
   informationSaveStatus: GuestInformationSaveStatus = {};
   extendedId?: number | null;
   canShowError: boolean = false;
 
-  constructor() {
+  constructor(private surveyService: SurveysService) {
     this.addGuest();
   }
 
@@ -55,8 +59,10 @@ export class SurveyComponent {
       console.log('Can\'t submit');
       return;
     }
-    // Do something
-    console.log('Submited');
+
+    const toSave = Object.values(this.savedInfrormations);
+    this.surveyService.createAnswer(toSave)
+      .subscribe(_ => this._snackBar.open('Submetido.'));
     return;
   }
 
