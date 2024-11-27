@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class SurveysService {
-  private url: string = 'https://casamento-api.carlosmorgado.me/survey-answers';
+  private url: string = 'https://casamento.carlosmorgado.me/api/survey-answers';
 
   constructor(private http: HttpClient) { }
 

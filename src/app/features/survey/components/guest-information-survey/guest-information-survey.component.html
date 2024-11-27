@@ -30,6 +30,11 @@
             </div>
           </mat-grid-tile>
         </mat-grid-list>
+
+      
+        @if (hasChildAgeError()) {
+          <mat-error>Selecione pelo menos uma idade para a Criança.</mat-error>
+        }
       </mat-card-content>
     </mat-card>
     <br>

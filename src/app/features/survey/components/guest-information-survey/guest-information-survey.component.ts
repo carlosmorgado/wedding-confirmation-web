@@ -57,7 +57,8 @@ export class GuestInformationSurveyComponent implements OnInit {
     if (!this.isInitialized) {
       return false;
     }
-    return this.guestInformationForm.get('child_toggle')?.value;
+
+    return this.guestInformationForm.get('child_toggle')?.value ?? false;
   }
 
   guestInformationForm: FormGroup = new FormGroup({
@@ -115,10 +116,15 @@ export class GuestInformationSurveyComponent implements OnInit {
       return;
     }
 
+    if (this.hasChildAgeError()) {
+      return;
+    }
+
     this.onInformationSaved.emit({
       id: this.id,
       information: this.currentInformation
     });
+    console.log(this.isChild)
 
     this.savedGuestInformation = this.currentInformation;
 
@@ -130,6 +136,10 @@ export class GuestInformationSurveyComponent implements OnInit {
 
   isInformationSaved(): boolean {
     return JSON.stringify(this.savedGuestInformation) === JSON.stringify(this.currentInformation);
+  }
+
+  hasChildAgeError(): boolean {
+    return !this.currentInformation.isAdult && !this.currentInformation.isAgeFourToNine && !this.currentInformation.isAgeZeroToThree;
   }
 
   private get name(): string {
@@ -144,8 +154,8 @@ export class GuestInformationSurveyComponent implements OnInit {
   private get currentInformation(): GuestInformation {
     return {
       name: this.name,
-      isAgeZeroToThree: this.age === this.ageZeroToThree.value,
-      isAgeFourToNine: this.age === this.ageFourToNine.value,
+      isAgeZeroToThree: this.isChild && (this.age === this.ageZeroToThree.value),
+      isAgeFourToNine: this.isChild && (this.age === this.ageFourToNine.value),
       isAdult: !this.isChild,
       restrictions: this
         .restrictions
